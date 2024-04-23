@@ -1,263 +1,34 @@
+<!DOCTYPE hmtl>
 <html>
 
-<head>
+    <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <tittle>Lista de Tarefas</tittle>
+        <link rel="stylesheet" href="/index.css">
+    </head>
 
-    <title>Gerenciador de tarefas</title>
-    <!--CSS-->
-    <link rel="stylesheet" href="home.css">
-
-    <script>
-
-        window.onload = () => {
-
-            const add1 = document.getElementById("Btn1")
-            const add2 = document.getElementById("Btn2")
-            const btn_insere = document.getElementById("btnConfirma")
-            let lista = new Array()
-
-            if (window.localStorage.getItem("lista_tarefas")) {
-                let lista = JSON.parse(localStorage.getItem("lista_tarefas"))
-            }
-            else {
-                window.localStorage.setItem("lista_tarefas", JSON.stringify(lista))
-            }
-
-            function atualizar() {
-                lista = JSON.parse(window.localStorage.getItem("lista_tarefas"));
-                document.getElementById("val_1").innerHTML = "";
-                document.getElementById("val_2").innerHTML = "";
-                lista.forEach(tarefa => preenche(tarefa));
-            }
-
-            if (lista != null && lista !== undefined) {
-                atualizar()
-            }
-
-            function preenche(tarefa) {
-
-                const tarefas = document.createElement("div")
-                tarefas.style.display = "flex"
-                tarefas.style.alignItems = "center"
-                tarefas.style.justifyContent = "space_around"
-                tarefas.style.width = "98%"
-                tarefas.style.height = "20%"
-                tarefas.style.backgroundColor = "rgb(240, 225, 125)"
-                tarefas.style.borderColor = "#000000"
-                tarefas.style.borderRadius = "10px"
-                tarefas.style.marginTop = "5px"
-                tarefas.style.marginLeft = "5px"
-
-
-
-                const div_nome = document.createElement("div")
-                const nome = document.createElement("h3")
-
-                div_nome.style.display = "flex"
-                div_nome.style.width = "60%"
-                div_nome.style.alignItems = "center"
-                div_nome.style.justifyContent = "center"
-
-                nome.innerHTML = tarefa.nome
-                div_nome.id = "id_nome"
-                div_nome.appendChild(nome)
-
-                const div_data = document.createElement("div")
-                const data = document.createElement("h3")
-
-                div_data.style.display = "flex"
-                div_data.style.width = "40%"
-                div_data.style.alignItems = "center"
-                div_data.style.justifyContent = "center"
-
-
-                data.innerHTML = tarefa.data
-                div_data.id = "id_data"
-                div_data.appendChild(data)
-
-
-                tarefas.appendChild(div_nome)
-                tarefas.appendChild(div_data)
-
-                tarefas.onclick = function () {
-                    menu_tarefa(nome.innerHTML)
-                }
-
-                if (tarefa.valor == 1) {
-                    const afazer = document.getElementById("val_1")
-                    afazer.style.justifyContent = "space_evenly"
-                    afazer.style.gap = 5
-                    afazer.style.flexWrap = "wrap"
-
-                    afazer.appendChild(tarefas)
-                }
-
-                if (tarefa.valor == 2) {
-                    const conclu = document.getElementById("val_2")
-                    conclu.style.justifyContent = "space_evenly"
-                    conclu.style.gap = 5
-                    conclu.style.flexWrap = "wrap"
-
-                    conclu.appendChild(tarefas)
-                }
-
-
-
-            }
-
-            add1.onclick = function () {
-                console.log("Entrou")
-                const btn_insere = document.getElementById("btnConfirma")
-                const popUp = document.getElementById("janela_popUp")
-                popUp.style.visibility = "visible"
-                btn_insere.onclick = function (event) {
-                    insere(event, 1);
-                }
-            }
-
-            add2.onclick = function () {
-
-                const btn_insere = document.getElementById("btnConfirma")
-                const popUp = document.getElementById("janela_popUp")
-                popUp.style.visibility = "visible"
-                btn_insere.onclick = function (event) {
-                    insere(event, 2);
-                }
-            }
-
-            function insere(e, valor) {
-                e.preventDefault()
-                const nome = document.getElementById("camp_nome").value
-                const desc = document.getElementById("camp_desc").value
-                const data = document.getElementById("camp_data").value
-
-                lista.push({
-                    nome: nome,
-                    desc: desc,
-                    data: data,
-                    valor: valor
-                })
-
-                window.localStorage.setItem("lista_tarefas", JSON.stringify(lista))
-                const popUp = document.querySelector("#janela_popUp")
-                popUp.style.visibility = "hidden"
-                atualizar()
-
-            }
-
-            function menu_tarefa(nome) {
-
-                const menu_tarefas = document.getElementById("Menu_pop")
-                const menu_nome = document.getElementById("menu_nome")
-                const menu_desc = document.getElementById("menu_desc")
-                const menu_data = document.getElementById("menu_data")
-
-                const menub1 = document.getElementById("menuBtn1")
-                const menub2 = document.getElementById("menuBtn2")
-                const menub3 = document.getElementById("menuBtn3")
-
-                menu_tarefas.style.visibility = "visible"
-                const lista = JSON.parse(window.localStorage.getItem("lista_tarefas"))
-                const tarefa = lista.find(item => item.nome === nome)
-
-                menu_nome.innerHTML = tarefa.nome
-                menu_desc.innerHTML = tarefa.desc
-                menu_data.innerHTML = tarefa.data
-
-
-                menub1.onclick = function () {
-                    tarefa.valor = 2
-                    window.localStorage.setItem("lista_tarefas", JSON.stringify(lista))
-                    menu_tarefas.style.visibility = "hidden"
-                    atualizar()
-                }
-
-                menub2.onclick = function () {
-                    const lista = JSON.parse(window.localStorage.getItem("lista_tarefas"))
-                    for (let i = 0; i < lista.length; i++) {
-                        if (lista[i].nome === nome) {
-                            lista.splice(i, 1)
-                            window.localStorage.setItem("lista_tarefas", JSON.stringify(lista))
-                            menu_tarefas.style.visibility = "hidden"
-                            atualizar()
-                            break
-                        }
-                    }
-
-                }
-
-                menub3.onclick = function () {
-                    menu_tarefas.style.visibility = "hidden"
-                }
-
-            }
-        }
-
-    </script>
-
-</head>
-
-<body>
-    <header class="Barra">
-        <h1>Gerenciador de Tarefas</h1>
-    </header>
-
-    <main class="Principal">
-
-        <div class="AFazer">
-            <div class="Titulo">
-                <h1>A fazer</h1>
-            </div>
-            <div class="Tarefas" id="val_1"></div>
-            <div class="Botoes">
-                <div class="Add">
-                    <button class="Botao" id="Btn1">Adicionar</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="Concluidas">
-            <div class="Titulo">
-                <h1>ConcluÃ­das</h1>
-            </div>
-            <div class="Tarefas" id="val_2"></div>
-            <div class="Botoes">
-                <div class="Add">
-                    <a><button class="Botao" id="Btn2">Adicionar</button></a>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="PopUp" id="janela_popUp">
-            <h1 id="Titulo_tarefa">Tarefa a ser adicionada</h1>
-            <h2>Nome</h2>
-            <input type="text" name="" id="camp_nome">
-            <h2>DescriÃ§Ã£o</h2>
-            <input type="text" name="" id="camp_desc">
-            <h2>Data</h2>
-            <input type="date" name="" id="camp_data">
-            <button class="Botao2" id="btnConfirma">Adicionar</button>
-        </div>
-
-        <div class="menu" id="Menu_pop">
-            <div class="informacoes">
-                <h1 id="menu_nome"></h1>
-                <h2 id="menu_data"></h2>
-                <h3 id="menu_desc"></h3>
-            </div>
-
-            <div class="Botoes_menu">
-                <button class="Botao3" id="menuBtn1">Concluir</button>
-                <button class="Botao3" id="menuBtn2">Remover</button>
-                <button class="Botao3" id="menuBtn3">Fechar</button>
-            </div>
-        </div>
-
-    </main>
-
-</body>
-
+    <body>
+        {{#login}}
+        <h1>Realizar Login</h1>
+        <form action="/login" method="POST">
+            <label for="username">Nome Login</label>
+            <input type="text" id="username" name="username" autocomplete="username">
+            <label for="current-password">Senha</label>
+            <input type="password" id="current-password" name="password" autocomplete="current-password">
+            <button type="submit">Realizar Login</button>
+        <\form>
+        {{/login}}
+        {{^login}}
+            <h1>Nome : {{nome}} </h1>
+            <form action ="/criartarefa" method="POST">
+                <label for="tarefas">Tarefa</label>
+                <input type="text" id="tarefas" name="tarefas">
+                <button type="submit">Adicionar Tarefas</button>
+            </form>
+            {{#lista}}
+                <div>{{tarefa}}</div>
+            {{lista}}
+            <button id="sair">Sair</button>
+        {{/login}}
+    </body>
 </html>
