@@ -4,7 +4,6 @@
     <head>
 
         <tittle>Lista de Tarefas</tittle>
-        <link rel="stylesheet" href="/index.css">
     </head>
 
     <body>
@@ -19,6 +18,7 @@
         <\form>
         {{/login}}
         {{^login}}
+            <h1>Login realizado com sucesso</h1>
             <h1>Nome : {{nome}} </h1>
             <form action ="/criartarefa" method="POST">
                 <label for="tarefas">Tarefa</label>
@@ -27,7 +27,7 @@
             </form>
             {{#lista}}
                 <div>{{tarefa}}</div>
-            {{lista}}
+            {{/lista}}
             <button id="sair">Sair</button>
         {{/login}}
     </body>
